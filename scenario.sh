@@ -8,7 +8,7 @@ sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.
 sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 sudo yum -y install yum-utils
 sudo yum-config-manager --enable remi-php70
-sudo yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo
+sudo yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo php-xml php-intl php-mbstring php-xmlrpc php-soap
 #Install Apache
 sudo yum -y install httpd
 sudo systemctl start httpd
@@ -21,6 +21,23 @@ sudo mysql -e "CREATE DATABASE ${MAINDB} DEFAULT CHARACTER SET utf8mb4 COLLATE u
 sudo mysql -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,CREATE TEMPORARY TABLES,DROP,INDEX,ALTER ON ${MAINDB}.* TO '${MAINDB}'@'localhost' IDENTIFIED BY '${PASSWDDB}';"
 sudo mysql -e "GRANT ALL PRIVILEGES ON ${MAINDB}.* TO '${MAINDB}'@'localhost';"
 sudo mysql -e "FLUSH PRIVILEGES;"
+cat <<EOF | sudo tee -a /etc/mysql/my.cnf
+[client]
+default-character-set = utf8mb4
+
+[mysqld]
+innodb_file_format = Barracuda
+innodb_file_per_table = 1
+innodb_large_prefix
+
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+skip-character-set-client-handshake
+
+[mysql]
+default-character-set = utf8mb4
+EOF
+
 
 #Install App
 wget https://download.moodle.org/download.php/direct/stable36/moodle-latest-36.tgz
@@ -57,7 +74,7 @@ require_once(__DIR__ . '/lib/setup.php');
 // There is no php closing tag in this file,
 // it is intentional because it prevents trailing whitespace problems!
 EOF
-#sudo -u apache /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 --lang=pt-br --dbtype=mariadb --dblibrary=native --wwwroot=http://localhost:8080/moodle --dataroot=/var/moodledata --dbname=$MAINDB --dbuser=$MAINDB --dbport=3306 --fullname=Moodle --shortname=moodle --summary=Moodle --adminpass=Admin1234 --non-interactive --agree-license
+#sudo -u apache /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 --lang=pt-br --dbtype=mariadb --dblibrary=native --wwwroot=http://localhost:8080/moodle --dataroot=/var/moodledata --dbname=$MAINDB --dbuser=$MAINDB --dbport=3306 --fullname=Moodle --shortname=moodle --summary=Moodle --adminpass=moodle --non-interactive --agree-license
 sudo chmod o+r /var/www/html/moodle/config.php
 sudo mkdir /var/moodledata
 sudo chown -R apache:apache /var/moodledata
