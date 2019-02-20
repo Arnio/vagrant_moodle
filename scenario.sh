@@ -24,6 +24,7 @@ temp_password=$(grep password /var/log/mysqld.log | awk '{print $NF}')
 #mysql -uroot -p${temp_password} -e "CREATE USER ${MAINDB}@localhost IDENTIFIED BY '${PASSWDDB}';"
 #mysql -uroot -p${temp_password} -e "GRANT ALL PRIVILEGES ON ${MAINDB}.* TO '${MAINDB}'@'localhost';"
 #mysql -uroot -p${temp_password} -e "FLUSH PRIVILEGES;"
+
 sudo yum -y install php php-mysql
 sudo systemctl restart httpd
 sudo yum -y install php-fpm php-bcmath.x86_64 php-cli.x86_64 php-common.x86_64 php-dba.x86_64 php-devel.x86_64 php-embedded.x86_64 php-enchant.x86_64 php-fpm.x86_64 php-gd.x86_64
