@@ -2,12 +2,20 @@
 MAINDB="moodle"
 PASSWDDB= "moodle"
 #sudo yum -y update
+sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+sudo yum -y install yum-utils
+sudo yum-config-manager --enable remi-php70
+
 sudo yum -y install wget
 sudo yum -y install httpd
 sudo systemctl start httpd
 sudo yum -y install mariadb-server
-sudo systemctl start mariadb 
-wget https://download.moodle.org/download.php/stable36/moodle-latest-36.tgz
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
+wget https://download.moodle.org/download.php/direct/stable36/moodle-latest-36.tgz
+tar -xzf ~/moodle-latest-36.tgz 
+
 #wget http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
 #sudo yum -y install ./mysql57-community-release-el7-7.noarch.rpm 
 #sudo yum -y install mysql-community-server 
@@ -28,6 +36,8 @@ temp_password=$(grep password /var/log/mysqld.log | awk '{print $NF}')
 sudo yum -y install php php-mysql
 sudo systemctl restart httpd
 sudo yum -y install php-fpm php-bcmath.x86_64 php-cli.x86_64 php-common.x86_64 php-dba.x86_64 php-devel.x86_64 php-embedded.x86_64 php-enchant.x86_64 php-fpm.x86_64 php-gd.x86_64
+sudo yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo
+
 sudo firewall-cmd --zone=publicweb --add-service=ssh
 sudo firewall-cmd --permanent --zone=public --add-service=http 
 sudo firewall-cmd --permanent --zone=public --add-service=https
