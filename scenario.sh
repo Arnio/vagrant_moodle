@@ -21,23 +21,30 @@ sudo mysql -e "CREATE DATABASE ${MAINDB} DEFAULT CHARACTER SET utf8mb4 COLLATE u
 sudo mysql -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,CREATE TEMPORARY TABLES,DROP,INDEX,ALTER ON ${MAINDB}.* TO '${MAINDB}'@'localhost' IDENTIFIED BY '${PASSWDDB}';"
 sudo mysql -e "GRANT ALL PRIVILEGES ON ${MAINDB}.* TO '${MAINDB}'@'localhost';"
 sudo mysql -e "FLUSH PRIVILEGES;"
-sudo touch /etc/mysql/my.cnf
-cat <<EOF | sudo tee -a /etc/mysql/my.cnf
-[client]
-default-character-set = utf8mb4
+sudo mysql -e "SET GLOBAL character_set_server = 'utf8mb4';"
+sudo mysql -e "SET GLOBAL collation-server = 'utf8mb4_unicode_ci';"
+sudo mysql -e "SET GLOBAL innodb_file_format = 'BARRACUDA';"
+sudo mysql -e "SET GLOBAL innodb_large_prefix = 'ON';"
+sudo mysql -e "SET GLOBAL innodb_file_per_table = 'ON';"
 
-[mysqld]
-innodb_file_format = Barracuda
-innodb_file_per_table = 1
-innodb_large_prefix
 
-character-set-server = utf8mb4
-collation-server = utf8mb4_unicode_ci
-skip-character-set-client-handshake
+# sudo touch /etc/mysql/my.cnf
+# cat <<EOF | sudo tee -a /etc/mysql/my.cnf
+# [client]
+# default-character-set = utf8mb4
 
-[mysql]
-default-character-set = utf8mb4
-EOF
+# [mysqld]
+# innodb_file_format = Barracuda
+# innodb_file_per_table = 1
+# innodb_large_prefix
+
+# character-set-server = utf8mb4
+# collation-server = utf8mb4_unicode_ci
+# skip-character-set-client-handshake
+
+# [mysql]
+# default-character-set = utf8mb4
+# EOF
 
 
 #Install App
