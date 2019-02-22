@@ -1,8 +1,8 @@
 #!/bin/bash
 MAINDB="moodle"
-USERDB="root"
-PASSWDDB=""
-sudo yum -y update
+USERDB="moodleUS"
+PASSWDDB="moodlePAS"
+#sudo yum -y update
 
 # install PHP 7.0
 sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -29,19 +29,17 @@ sudo mysql -e "FLUSH PRIVILEGES;"
 
 #Install App
 curl https://download.moodle.org/download.php/direct/stable36/moodle-latest-36.tgz -o moodle-latest-36.tgz -s
-tar -xzf moodle-latest-36.tgz -C /var/www/html/
-sudo mkdir /var/moodledata
-sudo chcon -R -t httpd_sys_rw_content_t /var/moodledata
-sudo chown -R apache:apache /var/moodledata
-sudo chown -R apache:apache /var/www/
-
-sudo -u apache /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
+sudo tar -xzf moodle-latest-36.tgz -C /var/www/html/
+# sudo mkdir /var/moodledata
+#sudo -u apache /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
+sudo /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
  --lang=uk \
  --dbtype=mariadb \
  --wwwroot=http://localhost:8080/moodle \
  --dataroot=/var/moodledata \
  --dbname=$MAINDB \
  --dbuser=$USERDB \
+ --dbpass=$PASSWDDB \
  --dbport=3306 \
  --fullname=Moodle \
  --shortname=moodle \
@@ -50,6 +48,9 @@ sudo -u apache /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2
  --non-interactive \
  --agree-license
 sudo chmod o+r /var/www/html/moodle/config.php
+sudo chcon -R -t httpd_sys_rw_content_t /var/moodledata
+sudo chown -R apache:apache /var/moodledata
+sudo chown -R apache:apache /var/www/
 sudo systemctl restart httpd
 sudo systemctl enable firewalld
 sudo systemctl start firewalld
