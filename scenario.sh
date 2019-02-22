@@ -2,7 +2,7 @@
 MAINDB="moodle"
 USERDB="moodleUS"
 PASSWDDB="moodlePAS"
-#sudo yum -y update
+sudo yum -y update
 
 # install PHP 7.0
 sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -30,8 +30,7 @@ sudo mysql -e "FLUSH PRIVILEGES;"
 #Install App
 curl https://download.moodle.org/download.php/direct/stable36/moodle-latest-36.tgz -o moodle-latest-36.tgz -s
 sudo tar -xzf moodle-latest-36.tgz -C /var/www/html/
-# sudo mkdir /var/moodledata
-#sudo -u apache /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
+
 sudo /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
  --lang=uk \
  --dbtype=mariadb \
