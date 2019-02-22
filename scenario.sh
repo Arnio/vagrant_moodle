@@ -1,7 +1,7 @@
 #!/bin/bash
 MAINDB="moodle"
-USERDB-"moodle"
-PASSWDDB="moodle"
+USERDB="root"
+PASSWDDB=""
 sudo yum -y update
 
 # install PHP 7.0
@@ -19,7 +19,6 @@ sudo yum -y install mariadb-server
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
 sudo mysql -e "SET GLOBAL character_set_server = 'utf8mb4';"
-sudo mysql -e "SET GLOBAL collation-server = 'utf8mb4_unicode_ci';"
 sudo mysql -e "SET GLOBAL innodb_file_format = 'BARRACUDA';"
 sudo mysql -e "SET GLOBAL innodb_large_prefix = 'ON';"
 sudo mysql -e "SET GLOBAL innodb_file_per_table = 'ON';"
@@ -37,7 +36,7 @@ sudo chown -R apache:apache /var/moodledata
 sudo chown -R apache:apache /var/www/
 
 sudo -u apache /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
- --lang=pt-br \
+ --lang=uk \
  --dbtype=mariadb \
  --wwwroot=http://localhost:8080/moodle \
  --dataroot=/var/moodledata \
@@ -52,6 +51,8 @@ sudo -u apache /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2
  --agree-license
 sudo chmod o+r /var/www/html/moodle/config.php
 sudo systemctl restart httpd
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
 sudo firewall-cmd --zone=publicweb --add-service=ssh
 sudo firewall-cmd --permanent --zone=public --add-service=http 
 sudo firewall-cmd --permanent --zone=public --add-service=https
