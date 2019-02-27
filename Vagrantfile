@@ -3,7 +3,7 @@
 
 
 BOX_IMAGE = "centos/7"
-NODE_COUNT = 1
+NODE_COUNT = 2
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -86,14 +86,13 @@ Vagrant.configure("2") do |config|
       webconfig.vm.box = BOX_IMAGE
       webconfig.vm.hostname = "node#{i}"
       webconfig.vm.network :private_network, ip: "192.168.56.#{i + 100}"
+      webconfig.vm.provision "shell", path: "scenarioAWEB.sh"
       if i==1
-        webconfig.vm.provision "shell", path: "scenarioAWEB.sh"
         webconfig.vm.provision "shell", path: "scenarioINST.sh"
       else
-        webconfig.vm.provision "shell", path: "scenario.sh"
+        webconfig.vm.provision "shell", path: "scenarioCFG.sh"
       end
-      
-      
+            
     end
   end
   # Enable provisioning with a shell script. Additional provisioners such as
