@@ -54,32 +54,46 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-   config.vm.provider "virtualbox" do |vb|
+  config.vm.provider "virtualbox" do |vb|
   #   # Display the VirtualBox GUI when booting the machine
   #   vb.gui = true
   #
   #   # Customize the amount of memory on the VM:
      vb.memory = "2048"
-   end
+  end
   
    #
   # View the documentation for the provider you are using for more
   # information on available options.
  
-  config.vm.define "db" do |subconfig|
-    subconfig.vm.box = BOX_IMAGE
-    subconfig.vm.hostname = "moodledb"
-    subconfig.vm.network :private_network, ip: "192.168.56.10"
-    subconfig.vm.provision "shell", path: "scenarioDB.sh"
+  config.vm.define "db" do |dbconfig|
+    dbconfig.vm.box = BOX_IMAGE
+    dbconfig.vm.hostname = "moodledb"
+    dbconfig.vm.network :private_network, ip: "192.168.56.10"
+    dbconfig.vm.provision "shell", path: "scenarioMDB.sh"
   end
  
+  config.vm.define "bal" do |balconfig|
+    balconfig.vm.box = BOX_IMAGE
+    balconfig.vm.hostname = "moodlebal"
+    balconfig.vm.network :private_network, ip: "192.168.56.100"
+    balconfig.vm.provision "shell", path: "scenarioBAL.sh"
+  end 
  
+
   (1..NODE_COUNT).each do |i|
-    config.vm.define "node#{i}" do |subconfig|
-      subconfig.vm.box = BOX_IMAGE
-      subconfig.vm.hostname = "node#{i}"
-      subconfig.vm.network :private_network, ip: "192.168.56.#{i + 100}"
-      subconfig.vm.provision "shell", path: "scenarioWEB.sh"
+    config.vm.define "node#{i}" do |webconfig|
+      webconfig.vm.box = BOX_IMAGE
+      webconfig.vm.hostname = "node#{i}"
+      webconfig.vm.network :private_network, ip: "192.168.56.#{i + 100}"
+      if i==1
+        webconfig.vm.provision "shell", path: "scenarioAWEB.sh"
+        webconfig.vm.provision "shell", path: "scenarioINST.sh"
+      else
+        webconfig.vm.provision "shell", path: "scenario.sh"
+      end
+      
+      
     end
   end
   # Enable provisioning with a shell script. Additional provisioners such as
