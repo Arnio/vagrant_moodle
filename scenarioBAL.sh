@@ -57,6 +57,7 @@ http {
     # for more information.
     include /etc/nginx/conf.d/*.conf;
     upstream moodle {
+    ip_hash;    
     server 192.168.56.101;  
     server 192.168.56.102;
     }
@@ -129,15 +130,15 @@ EOF
 #     index index.html
 #   location / {
 #       proxy_pass http://moodle;
-#       health_check;
+#       
 #   }
 # }
 # EOF
 sudo nginx -t
 sudo systemctl restart nginx
-# sudo systemctl enable firewalld
-# sudo systemctl start firewalld
-# sudo firewall-cmd --permanent --add-service=ssh
-# sudo firewall-cmd --permanent --zone=public --add-service=http 
-# sudo firewall-cmd --permanent --zone=public --add-service=https
-# sudo firewall-cmd --reload
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+sudo firewall-cmd --permanent --add-service=ssh
+sudo firewall-cmd --permanent --zone=public --add-service=http 
+sudo firewall-cmd --permanent --zone=public --add-service=https
+sudo firewall-cmd --reload

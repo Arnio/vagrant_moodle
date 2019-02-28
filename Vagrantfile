@@ -1,9 +1,14 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-
+MAINDB="moodledb"
+USERDB="moodleus"
+PASSWDDB="moodle123"
+BASEHOST="192.168.56.10"
+BALHOST="192.168.56.100"
+NETWORK="192.168.56." # xxx.xxx.xxx.
+NODE_COUNT = 2
 
 BOX_IMAGE = "centos/7"
-NODE_COUNT = 2
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -69,14 +74,15 @@ Vagrant.configure("2") do |config|
   config.vm.define "db" do |dbconfig|
     dbconfig.vm.box = BOX_IMAGE
     dbconfig.vm.hostname = "moodledb"
-    dbconfig.vm.network :private_network, ip: "192.168.56.10"
-    dbconfig.vm.provision "shell", path: "scenarioMDB.sh"
+    dbconfig.vm.network :private_network, ip: BASEHOST
+    dbconfig.vm.provision "shell", path: "scenarioMDB.sh", :args => [MAINDB, USERDB, PASSWDDB, NETWORK]
+ 
   end
  
   config.vm.define "bal" do |balconfig|
     balconfig.vm.box = BOX_IMAGE
     balconfig.vm.hostname = "moodlebal"
-    balconfig.vm.network :private_network, ip: "192.168.56.100"
+    balconfig.vm.network :private_network, ip: BALHOST
     balconfig.vm.provision "shell", path: "scenarioBAL.sh"
   end 
  
@@ -85,12 +91,12 @@ Vagrant.configure("2") do |config|
     config.vm.define "node#{i}" do |webconfig|
       webconfig.vm.box = BOX_IMAGE
       webconfig.vm.hostname = "node#{i}"
-      webconfig.vm.network :private_network, ip: "192.168.56.#{i + 100}"
+      webconfig.vm.network :private_network, ip: "#{NETWORK}"+"#{i + 100}"
       webconfig.vm.provision "shell", path: "scenarioAWEB.sh"
       if i==1
-        webconfig.vm.provision "shell", path: "scenarioINST.sh"
+        webconfig.vm.provision "shell", path: "scenarioINST.sh", :args => [MAINDB, USERDB, PASSWDDB, BASEHOST, BALHOST]
       else
-        webconfig.vm.provision "shell", path: "scenarioCFG.sh"
+        webconfig.vm.provision "shell", path: "scenarioCFG.sh", :args => [MAINDB, USERDB, PASSWDDB, BASEHOST, BALHOST]
       end
             
     end
