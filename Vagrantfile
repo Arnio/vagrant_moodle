@@ -93,10 +93,11 @@ Vagrant.configure("2") do |config|
       webconfig.vm.hostname = "node#{i}"
       webconfig.vm.network :private_network, ip: "#{NETWORK}"+"#{i + 100}"
       webconfig.vm.provision "shell", path: "scenarioAWEB.sh"
+      WWWHOST="#{NETWORK}"+"#{i + 100}"
       if i==1
-        webconfig.vm.provision "shell", path: "scenarioINST.sh", :args => [MAINDB, USERDB, PASSWDDB, BASEHOST, BALHOST]
+        webconfig.vm.provision "shell", path: "scenarioINST.sh", :args => [MAINDB, USERDB, PASSWDDB, BASEHOST, WWWHOST]
       else
-        webconfig.vm.provision "shell", path: "scenarioCFG.sh", :args => [MAINDB, USERDB, PASSWDDB, BASEHOST, BALHOST]
+        webconfig.vm.provision "shell", path: "scenarioCFG.sh", :args => [MAINDB, USERDB, PASSWDDB, BASEHOST, WWWHOST]
       end
             
     end
