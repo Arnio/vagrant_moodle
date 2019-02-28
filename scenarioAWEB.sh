@@ -1,11 +1,4 @@
 #!/bin/bash
-# MAINDB="moodledb"
-# USERDB="moodleus"
-# PASSWDDB="moodle123"
-# BASEHOST="192.168.56.10"
-
-
-# WWWHOST=$(hostname --all-ip-addresses| awk '{ print $2}')
 
 #Install Apache
 sudo yum -y install httpd
