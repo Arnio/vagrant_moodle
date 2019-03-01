@@ -76,17 +76,8 @@ Vagrant.configure("2") do |config|
     dbconfig.vm.hostname = "moodledb"
     dbconfig.vm.network :private_network, ip: BASEHOST
     dbconfig.vm.provision "shell", path: "scenarioMDB.sh", :args => [MAINDB, USERDB, PASSWDDB, NETWORK]
- 
   end
  
-  config.vm.define "bal" do |balconfig|
-    balconfig.vm.box = BOX_IMAGE
-    balconfig.vm.hostname = "moodlebal"
-    balconfig.vm.network :private_network, ip: BALHOST
-    balconfig.vm.provision "shell", path: "scenarioBAL.sh"
-  end 
- 
-
   (1..NODE_COUNT).each do |i|
     config.vm.define "node#{i}" do |webconfig|
       webconfig.vm.box = BOX_IMAGE
@@ -102,6 +93,18 @@ Vagrant.configure("2") do |config|
             
     end
   end
+  
+  config.vm.define "bal" do |balconfig|
+    balconfig.vm.box = BOX_IMAGE
+    balconfig.vm.hostname = "moodlebal"
+    balconfig.vm.network :private_network, ip: BALHOST
+    balconfig.vm.provision "shell", path: "scenarioBAL.sh", :args => [BALHOST]
+    (1..NODE_COUNT).each do |n|
+      WEBHOST="#{NETWORK}"+"#{n + 100}"
+      balconfig.vm.provision "shell", path: "scenarioAddWeb.sh", :args => [WEBHOST]
+    end
+  end 
+ 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
