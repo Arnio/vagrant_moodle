@@ -1,6 +1,6 @@
 #!/bin/bash
 WEBHOST=$1
-# sudo yum -y update
+sudo yum -y update
 #Install Nginx
 sudo yum -y install epel-release
 sudo yum -y install nginx

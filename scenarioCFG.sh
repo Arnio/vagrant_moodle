@@ -5,8 +5,6 @@ PASSWDDB=$3
 BASEHOST=$4
 WWWHOST=$5
 
-#WWWHOST=$(hostname --all-ip-addresses| awk '{ print $2}')
-
 CFG='$CFG'
 cat <<EOF | sudo tee -a /var/www/html/moodle/config.php
 <?php  // Moodle configuration file
@@ -40,4 +38,5 @@ require_once(__DIR__ . '/lib/setup.php');
 // There is no php closing tag in this file,
 // it is intentional because it prevents trailing whitespace problems!
 EOF
+sudo chown -R apache:apache /var/www/html/moodle/config.php
 sudo chmod o+r /var/www/html/moodle/config.php

@@ -7,7 +7,7 @@ WWWHOST=$5
 #WWWHOST=$(hostname --all-ip-addresses| awk '{ print $2}')
 echo $WWWHOST
 
-sudo -u apache /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
+sudo /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
  --lang=uk \
  --dbtype=mariadb \
  --wwwroot=http://$WWWHOST/ \
@@ -23,3 +23,4 @@ sudo -u apache /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2
  --adminpass=Admin1 \
  --non-interactive \
  --agree-license
+sudo chown -R apache:apache /var/www/html/moodle
