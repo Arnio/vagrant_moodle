@@ -24,6 +24,7 @@ sudo /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
  --non-interactive \
  --agree-license
 
+CFG=$CFG
 cat <<EOF | sudo tee -a /var/www/html/moodle/config.php
 $CFG->session_redis_host = '${BASEHOST}';
 $CFG->session_redis_port = 6379;  // Optional.
