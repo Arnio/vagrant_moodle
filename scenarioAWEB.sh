@@ -1,4 +1,7 @@
 #!/bin/bash
+PASSWDDB=$1
+BASEHOST=$2
+
 sudo yum -y update
 #Install Apache
 sudo yum -y install httpd
@@ -10,7 +13,10 @@ sudo yum -y install yum-utils
 sudo yum --enablerepo=remi,remi-php72 install -y php \
          php-common php-pear php-mcrypt php-cli php-gd php-curl \
          php-mysqli php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-intl \
-         php-mbstring php-xmlrpc php-soap php-pgsql 
+         php-mbstring php-xmlrpc php-soap php-pgsql php-redis
+
+sudo sed -i -e 's/session.save_handler = files/session.save_handler = redis/g' /etc/php.ini
+sudo sed -i -e "s+;session.save_path = \"/tmp\"+session.save_path = \"tcp://$BASEHOST:6379?auth=$PASSWDDB\"+g" /etc/php.ini
 
 #Install App
 curl https://download.moodle.org/download.php/direct/stable36/moodle-latest-36.tgz -o moodle-latest-36.tgz -s

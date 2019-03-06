@@ -3,6 +3,7 @@ MAINDB=$1
 USERDB=$2
 PASSWDDB=$3
 NETWORK=$4
+BASEHOST=$5
 sudo yum -y update
 cat <<EOF | sudo tee -a /etc/yum.repos.d/MariaDB.repo
 # MariaDB 10.1 CentOS repository list
@@ -29,8 +30,8 @@ sudo mysql -e "CREATE USER '${USERDB}'@'${NETWORK}%' IDENTIFIED BY '${PASSWDDB}'
 sudo mysql -e "GRANT ALL PRIVILEGES ON ${MAINDB}.* TO '${USERDB}'@'localhost';"
 sudo mysql -e "GRANT ALL PRIVILEGES ON ${MAINDB}.* TO '${USERDB}'@'${NETWORK}%'"
 sudo mysql -e "FLUSH PRIVILEGES;"
-
 sudo systemctl restart mariadb
+
 sudo systemctl enable firewalld
 sudo systemctl start firewalld
 sudo firewall-cmd --permanent --add-service=ssh

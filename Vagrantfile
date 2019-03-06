@@ -47,7 +47,8 @@ Vagrant.configure("2") do |config|
     dbconfig.vm.box = BOX_IMAGE
     dbconfig.vm.hostname = "moodledb"
     dbconfig.vm.network :private_network, ip: BASEHOST
-    dbconfig.vm.provision "shell", path: "scenarioMDB.sh", :args => [MAINDB, USERDB, PASSWDDB, NETWORK]
+    dbconfig.vm.provision "shell", path: "scenarioMDB.sh", :args => [MAINDB, USERDB, PASSWDDB, NETWORK, BASEHOST]
+    dbconfig.vm.provision "shell", path: "scenarioRedis.sh", :args => [PASSWDDB, BASEHOST]
   end
  
   (1..NODE_COUNT).each do |i|
@@ -55,7 +56,7 @@ Vagrant.configure("2") do |config|
       webconfig.vm.box = BOX_IMAGE
       webconfig.vm.hostname = "node#{i}"
       webconfig.vm.network :private_network, ip: "#{NETWORK}"+"#{i + 100}"
-      webconfig.vm.provision "shell", path: "scenarioAWEB.sh"
+      webconfig.vm.provision "shell", path: "scenarioAWEB.sh", :args => [PASSWDDB, BASEHOST]
       WWWHOST="#{NETWORK}"+"#{i + 100}"
       if i==1
         webconfig.vm.provision "shell", path: "scenarioINST.sh", :args => [MAINDB, USERDB, PASSWDDB, BASEHOST, WWWHOST]

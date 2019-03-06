@@ -23,4 +23,13 @@ sudo /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
  --adminpass=Admin1 \
  --non-interactive \
  --agree-license
+
+cat <<EOF | sudo tee -a /var/www/html/moodle/config.php
+$CFG->session_redis_host = '${BASEHOST}';
+$CFG->session_redis_port = 6379;  // Optional.
+$CFG->session_redis_database = 0;  // Optional, default is db 0.
+$CFG->session_redis_prefix = ''; // Optional, default is don't set one.
+$CFG->session_redis_acquire_lock_timeout = 120;
+$CFG->session_redis_lock_expire = 7200;
+EOF
 sudo chown -R apache:apache /var/www/html/moodle
