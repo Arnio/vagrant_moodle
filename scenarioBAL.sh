@@ -19,6 +19,8 @@ body_bytes_sent='$body_bytes_sent'
 http_referer='$http_referer'
 http_user_agent='$http_user_agent'
 http_x_forwarded_for='$http_x_forwarded_for'
+host='$host'
+proxy_add_x_forwarded_for='$proxy_add_x_forwarded_for'
 sudo rm /etc/nginx/nginx.conf
 cat <<EOF | sudo tee -a /etc/nginx/nginx.conf
 
@@ -68,9 +70,9 @@ http {
 
         location / {
           proxy_pass http://moodle;
-          proxy_set_header Host $host;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header X-Real-IP $remote_addr;
+#          proxy_set_header Host $host;
+#          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#          proxy_set_header X-Real-IP $remote_addr;
         }
 
         error_page 404 /404.html;

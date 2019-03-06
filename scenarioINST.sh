@@ -26,6 +26,7 @@ sudo /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
 
 CFG='$CFG'
 cat <<EOF | sudo tee -a /var/www/html/moodle/config.php
+$CFG->session_handler_class = '\core\session\redis';
 $CFG->session_redis_host = '${BASEHOST}';
 $CFG->session_redis_port = 6379;  // Optional.
 $CFG->session_redis_database = 0;  // Optional, default is db 0.

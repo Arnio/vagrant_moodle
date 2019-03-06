@@ -36,7 +36,8 @@ $CFG->directorypermissions = 02770;
 require_once(__DIR__ . '/lib/setup.php');
 
 // There is no php closing tag in this file,
-// it is intentional because it prevents trailing whitespace problems!$CFG->session_handler_class = '\core\session\redis';
+// it is intentional because it prevents trailing whitespace problems!
+$CFG->session_handler_class = '\core\session\redis';
 $CFG->session_redis_host = '${BASEHOST}';
 $CFG->session_redis_port = 6379;  // Optional.
 $CFG->session_redis_database = 0;  // Optional, default is db 0.
@@ -46,3 +47,4 @@ $CFG->session_redis_lock_expire = 7200;
 EOF
 sudo chown -R apache:apache /var/www/html/moodle/config.php
 sudo chmod o+r /var/www/html/moodle/config.php
+
