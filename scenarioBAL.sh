@@ -70,9 +70,10 @@ http {
 
         location / {
           proxy_pass http://moodle;
-#          proxy_set_header Host $host;
-#          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-#          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Real-IP $remote_addr;
+
         }
 
         error_page 404 /404.html;

@@ -59,9 +59,9 @@ Vagrant.configure("2") do |config|
       webconfig.vm.provision "shell", path: "scenarioAWEB.sh", :args => [PASSWDDB, BASEHOST]
       WWWHOST="#{NETWORK}"+"#{i + 100}"
       if i==1
-        webconfig.vm.provision "shell", path: "scenarioINST.sh", :args => [MAINDB, USERDB, PASSWDDB, BASEHOST, WWWHOST]
+        webconfig.vm.provision "shell", path: "scenarioINST.sh", :args => [MAINDB, USERDB, PASSWDDB, BASEHOST, BALHOST, WWWHOST]
       else
-        webconfig.vm.provision "shell", path: "scenarioCFG.sh", :args => [MAINDB, USERDB, PASSWDDB, BASEHOST, WWWHOST]
+        webconfig.vm.provision "shell", path: "scenarioCFG.sh", :args => [MAINDB, USERDB, PASSWDDB, BASEHOST, BALHOST, WWWHOST]
       end
             
     end
